@@ -10,7 +10,7 @@ const app = express()
 
 
 const isLoggedIn = (req, res, next) => {
-  req.user ? next() : res.status(401);
+  req.user ? next() : res.send('Login first');
 }
 
 app.use(session({
@@ -48,10 +48,11 @@ app.get('/auth-error', (req, res) => {
 })
 
 app.get('/logout', (req, res, next) => {
-  req.session = null;
+  // req.session = null;
   req.logout((err) => {
     if (err) next(err);
   });
+  res.clearCookie('connect.sid', { path: '/' });
   res.redirect('/');
 });
 
